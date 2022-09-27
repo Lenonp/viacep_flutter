@@ -9,7 +9,7 @@ class AddressService {
   const AddressService({required this.uri});
 
   Future<Address> fetchAddress() async {
-    final response = await http.get(Uri.parse(uri));
+    final response = await http.get(Uri.parse('https://viacep.com.br/ws/$uri/json/'));
     if(response.statusCode == 200) {
       return Address.fromJson(jsonDecode(response.body));
     } else {

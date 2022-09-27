@@ -11,14 +11,8 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  late Future<Address> futureAddress;
-  final AddressService addressService = AddressService(uri: 'https://viacep.com.br/ws/01001000/json/');
-
-  @override
-  void initState(){
-    super.initState();
-    futureAddress = addressService.fetchAddress();
-  }
+  Future<Address>? futureAddress;
+  final TextEditingController cepTextController = TextEditingController();
 
   @override
   Widget build(BuildContext context){
@@ -27,14 +21,26 @@ class _HomeState extends State<Home> {
         title: Text('ViaCEP'),
       ),
       body: Center(
-        child: FutureBuilder<Address>(future: futureAddress, builder: ((context, snapshot) {
-          if(snapshot.hasData) {
-            return AddressComponent(data: snapshot.data!);
-          } else if(snapshot.hasError) {
-            return Text('No address available');
-          }
-          return CircularProgressIndicator();
-        }),),
+        child: Column(
+          children: [
+            TextField(controller: cepTextController, keyboardType: TextInputType.number, maxLength: 8,),
+            ElevatedButton(onPressed: () {
+              final AddressService addressService = AddressService(uri: cepTextController.text);
+              setState(() {
+                futureAddress = addressService.fetchAddress();
+              });
+            }, child: Text('Find address')),
+
+            (futureAddress == null) ? Text('Nothing to show') : FutureBuilder<Address>(future: futureAddress, builder: ((context, snapshot) {
+              if(snapshot.hasData) {
+                return AddressComponent(data: snapshot.data!);
+              } else if(snapshot.hasError) {
+                return Text('No address available');
+              }
+              return CircularProgressIndicator();
+            }),),
+          ],
+        ),
       ),
     );
   }
