@@ -23,16 +23,27 @@ class _HomeState extends State<Home> {
       body: Padding(
         padding: EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            TextField(controller: cepTextController, keyboardType: TextInputType.number, maxLength: 8,),
-            ElevatedButton(onPressed: () {
-              final AddressService addressService = AddressService(uri: cepTextController.text);
-              setState(() {
-                futureAddress = addressService.fetchAddress();
-              });
-              },
-              child: Text('Find address'),
+            TextField(
+              controller: cepTextController,
+              keyboardType: TextInputType.number,
+              maxLength: 8,
+              decoration: InputDecoration(
+                hintText: '000000-000',
+                border: OutlineInputBorder(),
+              ),
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: ElevatedButton(onPressed: () {
+                final AddressService addressService = AddressService(uri: cepTextController.text);
+                setState(() {
+                  futureAddress = addressService.fetchAddress();
+                });
+                },
+                child: Text('Find address'),
+              ),
             ),
 
             (futureAddress == null) ? Text('Nothing to show') : _AddressView(futureAddress: futureAddress),
@@ -51,11 +62,14 @@ class _AddressView extends StatelessWidget {
   Widget build(BuildContext context) {
     return FutureBuilder<Address>(future: futureAddress, builder: ((context, snapshot) {
               if(snapshot.hasData) {
-                return AddressComponent(data: snapshot.data!);
+                return Row(children: <Widget>[AddressComponent(data: snapshot.data!)]);
               } else if(snapshot.hasError) {
                 return Text('No address available');
               }
-              return CircularProgressIndicator();
+              return Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: CircularProgressIndicator(),
+              );
             }),);
   }
 }

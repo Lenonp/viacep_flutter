@@ -5,4 +5,12 @@ ThemeData MainTheme = ThemeData(
   primarySwatch: Colors.pink,
   brightness: Brightness.dark,
 
+  textTheme: TextTheme(
+    bodyMedium: TextStyle(
+      fontSize: 16,
+    ),    
+    titleMedium: TextStyle(
+      fontSize: 22,
+    ),
+  ),
 );
