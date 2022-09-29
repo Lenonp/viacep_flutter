@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:viacep/screens/home.dart';
+import 'package:viacep/themes/main_theme.dart';
 
 void main() {
   runApp(const ViaCEP());
@@ -12,7 +13,7 @@ const ViaCEP({ Key? key }) : super(key: key);
   Widget build(BuildContext context){
     return MaterialApp(
       title: 'ViaCEP',
-      theme: ThemeData.dark(),
+      theme: MainTheme,
       home: Home(),
     );
   }
